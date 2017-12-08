@@ -1,15 +1,27 @@
 <?php
-include "connection.php";
+session_start();
+include "connection.php"; 
    @ $input_username = $_POST['input_user'];
    @ $input_password = $_POST['input_password'];
-   @ $login = $_POST['login'];
+   @ $login = $_POST['login'];*//
    @ $create = $_POST['create'];
+    
+
+    if (isset($_GET['logOut']))
+    {
+        session_unset();
+        session_destroy();
+    }
 
     if(isset($login))
     {
-        if (ValidateLogin($input_username, $input_password))
+        $id = ValidateLogin($input_username, $input_password);
+        if ($id != NULL)
         {
-            echo "logged in";
+            
+            $_SESSION['id'] = $id;
+            $_SESSION['loggedIn'] = true;
+            header("Location: landing_page.php");
         }
         
         else
@@ -33,12 +45,6 @@ include "connection.php";
             echo $input_username."is reserved, please select another one";
         }
     }
-
-    else
-    {
-        echo "no action";
-    }
-
 ?>
 
 
